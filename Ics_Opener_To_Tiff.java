@@ -420,7 +420,14 @@ public class Ics_Opener_To_Tiff implements PlugIn {
                      Integer sliceCount=new Integer(i+1);
                      stackNew.addSlice(sliceCount.toString(),pixelsNew[i][ch]);
                   }                                                                      
-                  ImagePlus impNew = new ImagePlus(fi[ch].fileName.substring(0,fi[ch].fileName.length()-4)+" ch: "+chCount.toString(), stackNew);
+
+						String filename = fi[ch].fileName.substring(0,fi[ch].fileName.length()-4)+" ch "+chCount.toString()+".tif";
+
+                  ImagePlus impNew = new ImagePlus(filename, stackNew);
+
+						FileSaver fileSaver = new FileSaver(impNew);
+						fileSaver.saveAsTiff(this.directory + filename);
+
                   impNew.getProcessor().resetMinAndMax();
                   impNew.show();
                }
