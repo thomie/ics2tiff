@@ -18,7 +18,7 @@ import ij.process.*;
 	Author: Nico Stuurman <nico@cmp.ucsf.edu>
 	Modified by Wayne Rashband (wsr)
 */
-public class Ics_Opener_To_Tiff implements PlugIn {
+public class Ics_Opener_To_Tiff extends Opener implements PlugIn {
 
 	private static String defaultDirectory = null;
    boolean interlaced = false;
@@ -29,9 +29,11 @@ public class Ics_Opener_To_Tiff implements PlugIn {
       if (arg.equals("about")) {
          showAbout(); 
       } else if (arg.equals("open")) {
-         this.open("");
+         this.openMultiple();
+			IJ.showMessage("If you didn't see any errors: converted channel 3 of all Ics images to TIFF files");
       } else {
-           this.open("");
+         this.openMultiple();
+			IJ.showMessage("If you didn't see any errors: converted channel 3 of all Ics images to TIFF files");
       }
       return; 
    }        
@@ -44,14 +46,16 @@ public class Ics_Opener_To_Tiff implements PlugIn {
    }
      
    
-	private void open(String arg) {
+	public void open(String path) {
 		if (!IJ.isJava2()) { //wsr
 			IJ.showMessage("ICS Opener", "This plugin requires Java 1.2 or later.");
 			return;
 		}
-		OpenDialog od = new OpenDialog("Open Ics/Ids file...", arg);
-		String directory = od.getDirectory();
-		String fileName = od.getFileName();
+		File file = new File(path);
+
+		String directory = file.getParent();
+		String fileName = file.getName();
+
 		String icsfileName;
 		String idsfileName;
 		if (fileName==null)
@@ -69,7 +73,7 @@ public class Ics_Opener_To_Tiff implements PlugIn {
 		else if (fileName.endsWith(".ids")) {
 				idsfileName=new String (fileName);
 				icsfileName=fileName.substring(0,fileName.length()-4)+".ics";
-				File f = new File(directory+icsfileName); 
+				File f = new File(directory, icsfileName); 
 				if (!f.exists()) {
 					IJ.showMessage("ICS Opener", "\""+icsfileName+"\" not found");
 					return;
@@ -78,7 +82,7 @@ public class Ics_Opener_To_Tiff implements PlugIn {
 		else if (fileName.endsWith(".IDS")) {
 				idsfileName=new String (fileName);
 				icsfileName=fileName.substring(0,fileName.length()-4)+".ICS";
-				File f = new File(directory+icsfileName); 
+				File f = new File(directory, icsfileName); 
 				if (!f.exists()) {
 					IJ.showMessage("ICS Opener", "\""+icsfileName+"\" not found");
 					return;
@@ -106,7 +110,7 @@ public class Ics_Opener_To_Tiff implements PlugIn {
 		}
 
 		public FileInfo[] IcsInfo () {
-			File icsFile=new File(this.directory,this.icsFileName);
+			File icsFile=new File(this.directory, this.icsFileName);
 			String line;
 			Integer numpars=new Integer(0);
 			String[] paramkeys=new String[0];
@@ -281,7 +285,7 @@ public class Ics_Opener_To_Tiff implements PlugIn {
 			}
                         else { 
                         	// for version 1 we need an ids file,check if it exists
-				File f = new File(this.directory+this.idsFileName); 
+				File f = new File(this.directory, this.idsFileName); 
 				if (!f.canRead()) {
 					IJ.showMessage("ICS Opener", "\""+this.idsFileName+"\" not found");
 					FileInfo[] fib=new FileInfo[0];
@@ -426,10 +430,11 @@ public class Ics_Opener_To_Tiff implements PlugIn {
                   ImagePlus impNew = new ImagePlus(filename, stackNew);
 
 						FileSaver fileSaver = new FileSaver(impNew);
-						fileSaver.saveAsTiff(this.directory + filename);
+						File file = new File(this.directory, filename);
+						fileSaver.saveAsTiff(file.getPath());
 
                   impNew.getProcessor().resetMinAndMax();
-                  impNew.show();
+                  //impNew.show();
                }
             }
          }
@@ -438,4 +443,4 @@ public class Ics_Opener_To_Tiff implements PlugIn {
 
 	}
 }
-// vim: ts=3
+// vim: ts=3 sts=3 sw=3
