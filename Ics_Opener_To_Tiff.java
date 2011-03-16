@@ -18,7 +18,7 @@ import ij.process.*;
 	Author: Nico Stuurman <nico@cmp.ucsf.edu>
 	Modified by Wayne Rashband (wsr)
 */
-public class Ics_Opener implements PlugIn {
+public class Ics_Opener_To_Tiff implements PlugIn {
 
 	private static String defaultDirectory = null;
    boolean interlaced = false;
@@ -37,8 +37,9 @@ public class Ics_Opener implements PlugIn {
    }        
 
    private void showAbout() {
-      IJ.showMessage("Ics_Opener", "This plugins opens Ics/Ids files.  \n" +
-            "   Nico Stuurman, January 2007"
+      IJ.showMessage("Ics_Opener_To_Tiff", "This plugins opens Ics/Ids files and converts channel 3 to Tiff \n" +
+            "   Nico Stuurman, January 2007\n" + 
+				"   Thomas Miedema (thomasmiedema@gmail.com), March 2011"
             );
    }
      
@@ -410,7 +411,7 @@ public class Ics_Opener implements PlugIn {
                impNew.getProcessor().resetMinAndMax();
                impNew.show();
             } else {  // less than MAX_CHANNELS channels
-               for (int ch=0; ch < nChannels; ch++) { 
+               for (int ch=2; ch < nChannels; ch++) { 
                   Integer chCount=new Integer(ch+1);
                   FileOpener fo=new FileOpener(fi[ch]);
                   ImageStack stackNew = new ImageStack(width, height,fo.createColorModel(fi[ch]));
@@ -430,3 +431,4 @@ public class Ics_Opener implements PlugIn {
 
 	}
 }
+// vim: ts=3
