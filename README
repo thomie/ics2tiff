@@ -2,7 +2,13 @@ See: http://valelab.ucsf.edu/~nico/IJplugins/Ics_Opener.html
 
 With this version you can select multiple files at once. It will save channel 3 to tiff files, and ignore all other channels.
 
-* Download the file `Ics_Opener_To_Tiff.jar` and put it in the plugins directory of 
+* Install ImageJ: http://rsbweb.nih.gov/ij/
+
+Ubuntu: sudo apt-get install imagej
+
+* Download the file `Ics_Opener_To_Tiff.jar` and put it in the plugins directory of ImageJ
+
+Ubuntu: $HOME/.imagej/plugins
 
 * Select this option im ImageJ:
 Edit -> Options -> Input/Output -> 'Use JFileChooser to open/save'
