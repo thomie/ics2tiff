@@ -17,6 +17,7 @@ import ij.process.*;
 
 	Author: Nico Stuurman <nico@cmp.ucsf.edu>
 	Modified by Wayne Rashband (wsr)
+	Modified by Thomas Miedema <thomasmiedema@gmail.com>
 */
 public class Ics_Opener_To_Tiff extends Opener implements PlugIn {
 
