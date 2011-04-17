@@ -1,6 +1,6 @@
 See: http://valelab.ucsf.edu/~nico/IJplugins/Ics_Opener.html
 
-With this version you can select multiple files at once. It will save channel 3 to tiff files, and ignore all other channels.
+With this version you can select multiple files at once. It will then show a dialog where you can select the channels you want to convert to tiff files.
 
 * Install ImageJ: http://rsbweb.nih.gov/ij/
 
@@ -14,7 +14,7 @@ Ubuntu: $HOME/.imagej/plugins
 Edit -> Options -> Input/Output -> 'Use JFileChooser to open/save'
 
 * To convert the Ics files to Tiff:
-Plugins -> InputOutput -> Ics/Ids channel 3 to Tiff
+Plugins -> InputOutput -> Ics/Ids to Tiff
 
 Use the Contol key the select multiple files at once, or type this in the File Name box: *.ics or *.tif.
 

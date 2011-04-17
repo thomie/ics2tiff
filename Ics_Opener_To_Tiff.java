@@ -31,10 +31,8 @@ public class Ics_Opener_To_Tiff extends Opener implements PlugIn {
          showAbout(); 
       } else if (arg.equals("open")) {
          this.openMultiple();
-			IJ.showMessage("If you didn't see any errors: converted channel 3 of all Ics images to TIFF files");
       } else {
          this.openMultiple();
-			IJ.showMessage("If you didn't see any errors: converted channel 3 of all Ics images to TIFF files");
       }
       return; 
    }        
@@ -45,7 +43,7 @@ public class Ics_Opener_To_Tiff extends Opener implements PlugIn {
 				"   Thomas Miedema (thomasmiedema@gmail.com), March 2011"
             );
    }
-     
+
    
 	public void open(String path) {
 		if (!IJ.isJava2()) { //wsr
@@ -416,7 +414,25 @@ public class Ics_Opener_To_Tiff extends Opener implements PlugIn {
                impNew.getProcessor().resetMinAndMax();
                impNew.show();
             } else {  // less than MAX_CHANNELS channels
-               for (int ch=2; ch < nChannels; ch++) { 
+					GenericDialog gd = new GenericDialog("Select channels");
+					String[] labels = new String[nChannels];
+					boolean[] defaults = new boolean[nChannels];
+					for (Integer ch=0; ch < nChannels; ch++) {
+						Integer chCount = new Integer(ch+1);
+						labels[ch] = "Channel: " + chCount.toString();
+						defaults[ch] = false;
+					}
+					gd.addCheckboxGroup(nChannels, 1, labels, defaults);
+					gd.showDialog();
+					if (gd.wasCanceled()) return;
+
+					Integer nChannelsSelected = 0; 
+					for (int ch=0; ch < nChannels; ch++) { 
+						if (!gd.getNextBoolean()) {
+							// Check if user selected this channel.
+							continue;
+						}
+						nChannelsSelected++;
                   Integer chCount=new Integer(ch+1);
                   FileOpener fo=new FileOpener(fi[ch]);
                   ImageStack stackNew = new ImageStack(width, height,fo.createColorModel(fi[ch]));
@@ -437,6 +453,9 @@ public class Ics_Opener_To_Tiff extends Opener implements PlugIn {
                   impNew.getProcessor().resetMinAndMax();
                   //impNew.show();
                }
+					if (nChannelsSelected > 0) {
+						IJ.showMessage("Converted " + nChannelsSelected.toString() + " channels of all selected Ics images to TIFF files");
+					}
             }
          }
          IJ.showStatus ("Done opening ICS file...");
