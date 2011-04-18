@@ -25,14 +25,18 @@ public class Ics_Opener_To_Tiff extends Opener implements PlugIn {
    boolean interlaced = false;
    // Maximmum number of channels displayed in individual stacks
    static int MAX_CHANNELS=5;
+	Integer nChannelsSelected = 0;
+	boolean[] selectedChannels = new boolean[MAX_CHANNELS];
 
    public void run(String arg) {
       if (arg.equals("about")) {
          showAbout(); 
-      } else if (arg.equals("open")) {
-         this.openMultiple();
       } else {
+			getChannels();
          this.openMultiple();
+			if (nChannelsSelected > 0) {
+				IJ.showMessage("Converted the selected channels and images to TIFF files");
+			}
       }
       return; 
    }        
@@ -44,6 +48,26 @@ public class Ics_Opener_To_Tiff extends Opener implements PlugIn {
             );
    }
 
+	private void getChannels() {
+		GenericDialog gd = new GenericDialog("Select channels");
+		String[] labels = new String[MAX_CHANNELS];
+		for (Integer ch=0; ch < MAX_CHANNELS; ch++) {
+			Integer chCount = new Integer(ch+1);
+			labels[ch] = " channel " + chCount.toString();
+			selectedChannels[ch] = false;
+		}
+		gd.addCheckboxGroup(MAX_CHANNELS, 1, labels, selectedChannels);
+		gd.showDialog();
+		if (gd.wasCanceled()) return;
+
+		for (int ch=0; ch < MAX_CHANNELS; ch++) { 
+			// Check if user selected this channel.
+			if (gd.getNextBoolean()) {
+				selectedChannels[ch] = true;
+				nChannelsSelected++;
+			}
+		}
+	}
    
 	public void open(String path) {
 		if (!IJ.isJava2()) { //wsr
@@ -414,25 +438,10 @@ public class Ics_Opener_To_Tiff extends Opener implements PlugIn {
                impNew.getProcessor().resetMinAndMax();
                impNew.show();
             } else {  // less than MAX_CHANNELS channels
-					GenericDialog gd = new GenericDialog("Select channels");
-					String[] labels = new String[nChannels];
-					boolean[] defaults = new boolean[nChannels];
-					for (Integer ch=0; ch < nChannels; ch++) {
-						Integer chCount = new Integer(ch+1);
-						labels[ch] = "Channel: " + chCount.toString();
-						defaults[ch] = false;
-					}
-					gd.addCheckboxGroup(nChannels, 1, labels, defaults);
-					gd.showDialog();
-					if (gd.wasCanceled()) return;
-
-					Integer nChannelsSelected = 0; 
 					for (int ch=0; ch < nChannels; ch++) { 
-						if (!gd.getNextBoolean()) {
-							// Check if user selected this channel.
+						if (!selectedChannels[ch]) {
 							continue;
 						}
-						nChannelsSelected++;
                   Integer chCount=new Integer(ch+1);
                   FileOpener fo=new FileOpener(fi[ch]);
                   ImageStack stackNew = new ImageStack(width, height,fo.createColorModel(fi[ch]));
@@ -453,9 +462,6 @@ public class Ics_Opener_To_Tiff extends Opener implements PlugIn {
                   impNew.getProcessor().resetMinAndMax();
                   //impNew.show();
                }
-					if (nChannelsSelected > 0) {
-						IJ.showMessage("Converted " + nChannelsSelected.toString() + " channels of all selected Ics images to TIFF files");
-					}
             }
          }
          IJ.showStatus ("Done opening ICS file...");
