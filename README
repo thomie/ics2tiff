@@ -1,6 +1,6 @@
 See: http://valelab.ucsf.edu/~nico/IJplugins/Ics_Opener.html
 
-With this version you can select multiple files at once. It will then show a dialog where you can select the channels you want to convert to tiff files.
+With this version you can select multiple files at once. It will then show a dialog where you can select the channels you want to convert to Tiff files.
 
 * Install ImageJ: http://rsbweb.nih.gov/ij/
 
@@ -10,16 +10,16 @@ Ubuntu: sudo apt-get install imagej
 
 Ubuntu: $HOME/.imagej/plugins
 
-* Select this option im ImageJ:
+* Select this option in ImageJ:
 Edit -> Options -> Input/Output -> 'Use JFileChooser to open/save'
 
-* To convert the Ics files to Tiff:
+* To convert the Ics files to Tiff files:
 Plugins -> InputOutput -> Ics/Ids to Tiff
 
-Use the Contol key the select multiple files at once, or type this in the File Name box: *.ics or *.tif.
+Use the Control key the select multiple files at once, or type this in the File Name box: *.ics or *.tif.
 
 
-See the file make for compile and packaging instructions.
+See the file `build.sh` for compile and packaging instructions.
 
-Contact me if you have encounter any problems.
+Contact me if you encounter any problems.
 http://github.com/thomie/ics2tiff
